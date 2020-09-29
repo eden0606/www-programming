@@ -1,0 +1,37 @@
+.hero-card {
+    width: 30%;
+    height: 35%;
+}
+
+.hero-image-div {
+    display: flex;
+    justify-content: center;
+}
+
+.hero-image-inner-div {
+    display: block;
+    justify-content: center;
+}
+
+#hero-img {
+    width: 120px; 
+    height: 120px; 
+    /* border: 5px solid white;  */
+    margin: 20px;
+}
+
+.centered-text {
+    text-align: center;
+}
+
+.hero-title {
+    text-align: center;
+    padding: 15px;
+    padding-top: 5px;
+    color: white;
+}
+
+.hero-button {
+    margin: 15px;
+
+}
