@@ -1,0 +1,119 @@
+#root {
+    display: flex;
+}
+
+.game {
+    width: 515px;
+    height: 515px;
+    background-color: #DFD4DD;
+}
+
+.flex-wrap {
+    flex-basis: 50%;
+}
+
+.on-status-content {
+    text-align: center;
+    padding-top: 150px;
+}
+.on-status-content-how-to {
+    text-align: center;
+    padding-top: 110px;
+}
+
+.change-padding {
+    padding-bottom: 0px;
+    padding-top: 20px;
+    padding-left: 100px;
+
+}
+
+.tile-size {
+    width: 100px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+.tile-content {
+    font-size: 30px;
+}
+
+.title-2048 {
+    font-size: 100px;
+}
+
+.title-score {
+    font-size: 30px;
+}
+
+.title-gameboard {
+    font-size: 100px;
+}
+
+.score-display {
+    display: inline;
+}
+
+.button-padding {
+    padding-bottom: 5px;
+}
+
+.button-colors {
+    background-color: #DFD4DD;
+    color: #675c63; 
+}
+
+.button-colors-2 {
+    background-color: #FDECBB;
+    color: #675c63; 
+}
+
+.upper-size {
+    height: 175px;
+}
+
+.upper-width {
+    width: 515px;
+}
+
+.game-container {
+    display: flex;
+}
+
+.how-to-content {
+    font-size: 25px;
+}
+
+.on-lose {
+    position: absolute;
+    opacity: 90%;
+    z-index: 1;
+    display: none;
+}
+
+.on-win {
+    position: absolute;
+    opacity: 90%;
+    z-index: 1;
+    display: none;
+}
+
+.on-how-to {
+    position: absolute;
+    opacity: 90%;
+    z-index: 1;
+    display: none;
+}
+
+.color-0 {
+    background-color: transparent;
+}
+
+.color-2 {
+    background-color: green;
+}
+
+

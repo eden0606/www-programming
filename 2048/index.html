@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <title>2048</title>
+
+    <!-- Include links to CSS stylesheets below -->
+    <link rel="stylesheet" href="node_modules/bulma/css/bulma.css">
+    <link rel="stylesheet" type="text/css" href="a07-style.css" />
+    <!-- Include links to JavaScript files below -->
+    <script src="node_modules/jquery/dist/jquery.js"></script>
+    <script src="engine/game.js" type="module"></script>
+    <script src="engine/controller.js" type="module"></script>
+    <script src="engine/main.js" type="module"></script>
+</head>
+
+<body>
+    <div id="root">
+        <section class="section flex-wrap change-padding">
+            <div class="container">
+                <nav class="level upper-size upper-width">
+                    <div class="level-item">
+                        <span class="title-2048">2048</span>
+                    </div>
+                    <div class="level-item">
+                        <div class="score-display">
+                            <div class="title-score">
+                                <p>score</p>
+                            </div>
+                            <div><button id="let-me-win-button" class="button button-colors score">0</button></div>
+
+                        </div>
+                    </div>
+                    <div class="level-item score-display">
+                        <div class="button-padding">
+                            <button id="reset-button" class="button button-colors">reset</button>
+                        </div>
+                        <div>
+                            <button id="how-to-button" class="button button-colors">how to play</button>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+            <div class="container game-container">
+                <div class="box game">
+                    <div id="row0" class="tile is-ancestor">
+                    </div>
+                    <div id="row1" class="tile is-ancestor">
+                    </div>
+                    <div id="row2" class="tile is-ancestor">
+                    </div>
+                    <div id="row3" class="tile is-ancestor">
+                    </div>
+                </div>
+                <div id="lose-popup" class="box game on-lose">
+                    <div class="on-status-content">
+                        <h3 class="title is-1">game over :(</h3>
+                        <button id="try-again-button" class="button button-colors-2 is-large">try again!</button>
+                    </div>
+                </div>
+                <div id="win-popup" class="box game on-win">
+                    <div class="on-status-content">
+                        <h3 class="title is-1">you won!!!!</h3>
+                        <button id="continue-button" class="button button-colors-2 is-large">continue playing!</button>
+                    </div>
+                </div>
+                <div id="how-to-popup" class="box game on-how-to">
+                    <div class="on-status-content-how-to">
+                        <h3 class="title is-1">how to play</h3>
+                        <p class="subtitle is-4">use your arrow keys to move the tiles. tiles with the same number
+                            merge into one when they touch. add them up to reach <strong>2048</strong>!</p>
+                        <button id="play-button" class="button button-colors-2 is-large">play!</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="section flex-wrap change-padding">
+            <div class="container">
+                <div class="upper-size">
+                    <div>
+                        <span class="title-gameboard">game state</span>
+                    </div>
+                </div>
+                <div id="gamestate" class="box game">
+                </div>
+            </div>
+        </section>
+    </div>
+
+
+</body>
+
+</html>
