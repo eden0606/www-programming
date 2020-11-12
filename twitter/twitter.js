@@ -130,23 +130,32 @@ async function handleReplyButton() {
 
 // handles button click for reply submission
 async function handleReplySubmitButton() {
-    let tweetId = event.target.parentElement.id.substring(5);
-    
+    let tweetId = event.target.parentElement.parentElement.id.substring(5);
+
     await createTweet($('#reply-textarea').val(), "reply", tweetId);
 
     let currentTweet = await getTweetAt(tweetId);
-    $(`#reply${tweetId}`).replaceWith(renderUpdatedTweet(currentTweet));
 
-    // gets updated reply count
-    $(`#replies${tweetId}`).html(currentTweet.replyCount);
+    if (currentTweet.parent == undefined) {
+        $(`#reply${tweetId}`).replaceWith(renderUpdatedTweet(currentTweet));
+
+        // gets updated reply count
+        $(`#replies${tweetId}`).html(currentTweet.replyCount);
+    } else {
+        renderTwitterPosts(true);
+    }
 }
 
 // handles button click for canceling a reply
 async function handleReplyCancelButton() {
     let tweetId = event.target.parentElement.parentElement.id.substring(5);
-
     let currentTweet = await getTweetAt(tweetId);
-    $(`#reply${tweetId}`).replaceWith(renderUpdatedTweet(currentTweet));
+
+    if (currentTweet.parent == undefined) {
+        $(`#reply${tweetId}`).replaceWith(renderUpdatedTweet(currentTweet));
+    } else {
+        renderTwitterPosts(true);
+    }
 }
 
 // handles button click for retweet
@@ -158,8 +167,7 @@ function handleRetweetButton() {
         <div><h1 id="edit-title" class="title is-4"> retweet </h1></div>
         <textarea placeholder="add a message here!" id="retweet-textarea" class="textarea" rows="2.5"></textarea>
         <div id="retweet-buttons"><button id="retweet-cancel-button" class="button is-light">cancel</button><button id="retweet-submit-button" class="button is-light">retweet</button></div>
-    </div>
-    `
+        </div>`
 
     $(`#${tweetId}`).replaceWith(retweetArea);
 }
@@ -167,8 +175,8 @@ function handleRetweetButton() {
 // handles button click for submitting retweet
 async function handleRetweetSubmitButton() {
     let tweetId = event.target.parentElement.parentElement.id.substring(7);
-    
-    await createTweet($('#retweet-textarea').val(), "retweet", tweetId);
+
+    await createTweet($('#retweet-textarea').val(), 'retweet', tweetId);
 
     renderTwitterPosts(true);
 }
@@ -177,23 +185,32 @@ async function handleRetweetSubmitButton() {
 async function handleRetweetCancelButton() {
     let tweetId = event.target.parentElement.parentElement.id.substring(7);
 
-    let currentTweet = await getTweetAt(tweetId);
-    $(`#retweet${tweetId}`).replaceWith(renderUpdatedTweet(currentTweet));
+    renderTwitterPosts(true);
+
+    // let currentTweet = await getTweetAt(tweetId);
+    // $(`#retweet${tweetId}`).replaceWith(renderUpdatedTweet(currentTweet));
 }
 
 // handles button click for likes/unlike
 async function handleLikeButton() {
-    let tweetId = event.target.parentElement.parentElement.id;
+    let anomaly = event.target.id;
+    let tweetId = event.target.id.substring(10);
     let likeIcon = event.target;
+
+    if (anomaly == "like-button") {
+        tweetId = event.target.className;
+        likeIcon = event.target.querySelector('i');
+    }
+    
     let currentTweet = await getTweetAt(tweetId);
 
     if (currentTweet.isLiked) {
         await unlikeTweet(tweetId);
-        likeIcon.className = "far fa-heart";
+        likeIcon.className = 'far fa-heart';
 
     } else if (!currentTweet.isMine) {
         await likeTweet(tweetId);
-        likeIcon.className = "fas fa-heart";
+        likeIcon.className = 'fas fa-heart';
     }
 
     // gets updated like count
@@ -219,18 +236,21 @@ async function handleEditButton() {
 
 // handles button click for updating twitter post
 async function handleUpdateButton() {
-    let tweetId = event.target.parentElement.id.substring(4);
+    let tweetId = event.target.parentElement.parentElement.id.substring(4);
     let currentTweet = await updateTweet($('#edit-textarea').val(), tweetId);
 
-    $(`#edit${tweetId}`).replaceWith(renderUpdatedTweet(currentTweet));
+    if (currentTweet.parent == undefined) {
+        $(`#edit${tweetId}`).replaceWith(renderUpdatedTweet(currentTweet));
+    } else {
+        renderTwitterPosts(true);
+    }
 }
 
 // handles button click for canceling updating a post
 async function handleUpdateCancelButton() {
     let tweetId = event.target.parentElement.parentElement.id.substring(4);
 
-    let currentTweet = await getTweetAt(tweetId);
-    $(`#edit${tweetId}`).replaceWith(renderUpdatedTweet(currentTweet));
+    renderTwitterPosts(true);
 }
 
 // handles button click for deleting twitter post
@@ -238,7 +258,7 @@ async function handleDeleteButton() {
     let tweetId = event.target.parentElement.parentElement.id;
     await deleteTweet(tweetId);
 
-    $(`#${tweetId}`).remove();
+    renderTwitterPosts(true);
 }
 
 // handles button click for creating a new tweet
@@ -257,15 +277,15 @@ async function handleCreateButton() {
 // handles button click for posting a new tweet
 async function handlePostButton() {
     await createTweet($('#create-textarea').val());
-    
-    let messageSuccess = 
-    `<div class="notification">
+
+    let messageSuccess =
+        `<div class="notification">
         <button id="notification-delete-button" class="delete"></button>
         tweet successfully created!
     </div>`
 
-    let messageFail = 
-    `<div class="notification">
+    let messageFail =
+        `<div class="notification">
         <button id="notification-delete-button" class="delete"></button>
         tweet not created :( please enter in some text!
     </div>`
@@ -296,7 +316,7 @@ async function renderTwitterPosts(rerender) {
     }
 
     // iterates through tweet and gets info to append to tweet
-    for (let i = 0; i < 4; i++) {
+    for (let i = tweets.length - 1; i >= 0; i--) {
         let tweetId = tweets[i].id;
         let author = tweets[i].author;
         let username = author.slice(0, -1);
@@ -315,34 +335,86 @@ async function renderTwitterPosts(rerender) {
         if (tweets[i].isLiked) {
             heartClassIcon = "fas fa-heart"
         }
-    
+
         // check if post is mine to enable editing/deleting
         if (tweets[i].isMine) {
-            editIcon = `<a id="edit-button"><i class="far fa-edit"></i></a>`;
-            deleteIcon = `<a id="delete-button"><i class="far fa-trash-alt"></i></a>`;
+            editIcon = `<div id="${tweetId}" class="level-item"><a id="edit-button"><i class="far fa-edit"></i></a></div>`;
+            deleteIcon = `<div id="${tweetId}" class="level-item"><a id="delete-button"><i class="far fa-trash-alt"></i></a></div>`;
         }
-    
+
         let renderedPost =
             `<div id=${tweetId} class="box tweet-size"> 
-                <h1> ${author}</h1>
-                <p> @${username}</p>
-                <p>${post}</p>
-                <p>${createdAt}</p>
-                <a id="reply-button"><i class="far fa-comment"></i></a>
-                <span id='replies${tweetId}'>${replyCount}</span>
-                <a id="retweet-button"><i class="fas fa-retweet"></i></a>
-                <span>${retweetCount}</span>
-                <a id="like-button"><i class='${heartClassIcon}'></i></a>
-                <span id='like${tweetId}'>${likeCount}</span>
-                ${editIcon}
-                ${deleteIcon}
+                <p> 
+                    <span class="title is-6 tweet-author">${author}</span>
+                    <span class="subtitle is-6">@${username}</span>
+                </p>
+                <p class="body-style">${post}</p>
+                <p class="createdAt-style"><em>${createdAt}</em></p>
+                <div class="level interactive-button-style">
+                    <div id="${tweetId}" class="level-item">
+                        <a id="reply-button"><i class="far fa-comment"></i></a>
+                        <span id='replies${tweetId}'>${replyCount}</span>
+                    </div>
+                    <div id="${tweetId}" class="level-item">
+                        <a id="retweet-button"><i class="fas fa-retweet"></i></a>
+                        <span>${retweetCount}</span>
+                    </div>
+                    <div id="${tweetId}" class="level-item">
+                        <a id="like-button" class="${tweetId}"><i id="likeButton${tweetId}" class='${heartClassIcon}'></i></a>
+                        <span id='like${tweetId}'>${likeCount}</span>
+                    </div>
+                    ${editIcon}
+                    ${deleteIcon}
+                </div>
             </div>`
+
+        if (tweets[i].type == "retweet") {
+            let parentTweet = $(`#${tweets[i].parentId}`).html();
+            username = tweets[i].author.slice(0, -1);
+            username = username.replace(/ /g, "").toLowerCase();
+
+            if (parentTweet == undefined) {
+                parentTweet = `<span class="tweet-deleted-holder">this tweet has been deleted :(</span>`
+            } else {
+                let cutOff = parentTweet.indexOf('<div class="level');
+                parentTweet = parentTweet.substring(0, cutOff);
+            }
+
+            renderedPost =
+                `<div id=${tweetId} class="box"> 
+                <p> 
+                    <span class="title is-6 tweet-author">${author}</span>
+                    <span class="subtitle is-6">@${username}</span>
+                </p>
+                <p class="body-style">${post}</p>
+                <div class="box retweet-container">
+                    ${parentTweet}
+                </div>
+                <p><em>${createdAt}</em></p>
+                <div class="level interactive-button-style">
+                    <div id="${tweetId}" class="level-item">
+                        <a id="reply-button"><i class="far fa-comment"></i></a>
+                        <span id='replies${tweetId}'>${replyCount}</span>
+                    </div>
+                    <div id="${tweetId}" class="level-item">
+                        <a id="retweet-button"><i class="fas fa-retweet"></i></a>
+                        <span>${retweetCount}</span>
+                    </div>
+                    <div id="${tweetId}" class="level-item">
+                        <a id="like-button" class="${tweetId}"><i id="likeButton${tweetId}" class='${heartClassIcon}'></i></a>
+                        <span id='like${tweetId}'>${likeCount}</span>
+                    </div>
+                    ${editIcon}
+                    ${deleteIcon}
+                </div>
+            </div>`
+        }
 
         // if we are not rerendering to create a new post then append as normal, otherwise, replace 
         if (rerender) {
-            $('#tweet-container').append(renderedPost);
+            $('#tweet-container').prepend(renderedPost);
         } else {
-            $('#tweet-container').append(renderedPost);
+            $('#tweet-container').prepend(renderedPost);
         }
 
     }
@@ -370,24 +442,34 @@ function renderUpdatedTweet(tweet) {
 
     // check if post is mine to enable editing/deleting
     if (tweet.isMine) {
-        editIcon = `<a id="edit-button"><i class="far fa-edit"></i></a>`;
-        deleteIcon = `<a id="delete-button"><i class="far fa-trash-alt"></i></a>`;
+        editIcon = `<div id="${tweetId}" class="level-item"><a id="edit-button"><i class="far fa-edit"></i></a></div>`;
+        deleteIcon = `<div id="${tweetId}" class="level-item"><a id="delete-button"><i class="far fa-trash-alt"></i></a></div>`;
     }
 
     let renderedPost =
         `<div id=${tweetId} class="box tweet-size"> 
-            <h1> ${author}</h1>
-            <p> @${username}</p>
-            <p>${post}</p>
-            <p>${createdAt}</p>
-            <a id="reply-button"><i class="far fa-comment"></i></a>
-            <span>${replyCount}</span>
-            <a id="retweet-button"><i class="fas fa-retweet"></i></a>
-            <span>${retweetCount}</span>
-            <a id="like-button"><i class='${heartClassIcon}'></i></a>
-            <span id='like${tweetId}'>${likeCount}</span>
-            ${editIcon}
-            ${deleteIcon}
+        <p> 
+            <span class="title is-6 tweet-author">${author}</span>
+            <span class="subtitle is-6">@${username}</span>
+        </p>
+        <p class="body-style">${post}</p>
+        <p class="createdAt-style"><em>${createdAt}</em></p>
+            <div class="level interactive-button-style">
+                    <div id="${tweetId}" class="level-item">
+                        <a id="reply-button"><i class="far fa-comment"></i></a>
+                        <span id='replies${tweetId}'>${replyCount}</span>
+                    </div>
+                    <div id="${tweetId}" class="level-item">
+                        <a id="retweet-button"><i class="fas fa-retweet"></i></a>
+                        <span>${retweetCount}</span>
+                    </div>
+                    <div id="${tweetId}" class="level-item">
+                        <a id="like-button" class="${tweetId}"><i id="likeButton${tweetId}" class='${heartClassIcon}'></i></a>
+                        <span id='like${tweetId}'>${likeCount}</span>
+                    </div>
+                    ${editIcon}
+                    ${deleteIcon}
+            </div>
         </div>`
 
     return renderedPost;

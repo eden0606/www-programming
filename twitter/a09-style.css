@@ -1,0 +1,79 @@
+
+
+a {
+    text-decoration: none;
+}
+
+.edit-form {
+    text-align: center;
+}
+
+#update-button, #update-cancel-button, #post-button, #post-cancel-button, #reply-submit-button, #reply-cancel-button, #retweet-submit-button, #retweet-cancel-button {
+    margin: 10px;
+}
+
+#create-tweet-button {
+    margin-bottom: 60px;
+    margin-top: 20px;
+}
+
+.twitter-header {
+    text-align: center;
+}
+
+#create-title, .twitter-title, #edit-title {
+    margin-bottom: 20px;
+}
+
+#tweet-container {
+    width: 60%;
+}
+
+.retweet-container {
+    margin-top: 20px;
+}
+
+.body-style {
+    word-wrap: break-word;
+}
+
+.container-size {
+    width: 60%;
+}
+
+.interactive-button-style {
+    padding-top: 20px;
+}
+
+#reply-button, #like-button, #retweet-button {
+    padding-right: 5px;
+    color: #127b88;
+}
+
+#edit-button, #delete-button {
+    color: #127b88;
+}
+
+.createdAt-style {
+    padding-top: 15px;
+}
+
+#twitter-logo {
+    float: left;
+}
+
+#twitter-logo-container {
+    padding: 20px;
+}
+
+.twitter-title, .tweet-author, #create-title, #edit-title, 
+#reply-title, #retweet-title, #create-tweet-button,
+#post-cancel-button, #post-button, #reply-submit-button, #reply-cancel-button,
+#retweet-submit-button, #retweet-cancel-button, #update-button, #update-cancel-button,
+.notification, .tweet-deleted-holder {
+    color: #127b88;
+}
+
+em {
+    color:#adadad;
+}
